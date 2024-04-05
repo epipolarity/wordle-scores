@@ -1,0 +1,17 @@
+/* MonthPicker.css */
+.button {
+    font-size: 14px;
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: lightblue;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+  }
