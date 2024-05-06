@@ -6,6 +6,7 @@ import Upload from './Upload';
 
 
 function App() {
+  const [refreshKey, setRefreshKey] = useState(0); // used to force a re-render of the Scores component
   const [entered, setEntered] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState(new Date());
   const [scores, setScores] = useState({ scores: [], summary: {} });
@@ -35,10 +36,16 @@ function App() {
       abortController.abort();
     }
 
-  }, [selectedMonth]);
+  }, [selectedMonth, refreshKey]);
 
   function enter() {
     setEntered(true);
+  }
+
+  function onUploadComplete() {
+    setUploading(false);
+    // fetch the scores again to update the list  
+    setRefreshKey((prevKey) => prevKey + 1);  
   }
 
   function cancelUpload() {
@@ -54,7 +61,7 @@ function App() {
   if (!entered) {
     componentToRender = <Enter onEnter={enter} />;
   } else if (uploading) {
-    componentToRender = <Upload onCancel={cancelUpload} />;
+    componentToRender = <Upload onCancel={cancelUpload} onUploadComplete={onUploadComplete} />;
   } else {
     componentToRender = <>
       <Scores

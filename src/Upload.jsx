@@ -1,12 +1,16 @@
 import { parseText } from "./utils/parser";
+import AddedRecords from "./AddedRecords";
 import { useRef, useState } from "react";
 
 import './Upload.css';
 
-function Upload({ onCancel }) {
+function Upload({ onCancel, onUploadComplete }) {
+    const dropAreaRef = useRef(null);
     const fileInputRef = useRef(null);
-    const [results, setResults] = useState({});
+    const [parsedFileData, setParsedFileData] = useState({});
     const [password, setPassword] = useState('');
+    const [recordsWereAdded, setRecordsWereAdded] = useState(false);
+    const [recordsAdded, setRecordsAdded] = useState([]);
 
     const handleFiles = (files) => {
         if (Object.keys(files).length > 1) {
@@ -18,8 +22,9 @@ function Upload({ onCancel }) {
         const reader = new FileReader();
         reader.onload = (event) => {
             const text = event.target.result;
-            const results = parseText(text);
-            setResults(results);
+            const parsedData = parseText(text);
+            dropAreaRef.current.innerText = `Found ${Object.keys(parsedData).length} records`;
+            setParsedFileData(parsedData);
         };
         reader.readAsText(files[0]);
     }
@@ -47,35 +52,75 @@ function Upload({ onCancel }) {
         handleFiles(files);
     };
 
-    const onSubmit = () => {
-        console.log(results);
+    const onSubmit = async () => {
+        // create a POST request to the server
+        const formData = new FormData();
+        formData.append('password', password);
+        formData.append('data', JSON.stringify(parsedFileData));
+        try {
+            const response = await fetch('https://www.epipolar.com/wordle2/upload_w2.php', {
+                method: 'POST',
+                body: formData
+            });
+            if (!response.ok) {
+                const message = await response.text();
+                alert(`Error: ${message}`);
+            } else {
+                const data = await response.json();
+                // if data is an array
+                if (Array.isArray(data)) {
+                    setRecordsWereAdded(true);
+                    setRecordsAdded(data);
+                } else { // just text
+                    alert(data);
+                    onCancel();
+                }
+            }
+        } catch (error) {
+            console.error("Error uploading data:", error);
+            alert("Error uploading data. Please try again later.");
+        }
     }
 
     return (
         <div id="uploadContainer">
-            <div>Upload file:</div>
-            <div
-                id="dropArea"
-                onClick={onDropAreaClick}
-                onDrop={onDrop}
-                onDragOver={onDragOver}
-            >
-                Drag and drop your file here
-                <br/>or<br/>
-                click to select a file
-                <input
-                    ref={fileInputRef}
-                    type="file"
-                    onClick={onFileInputClick}
-                    onChange={onFileChange}
-                    style={{ display: 'none' }}
-                />
-            </div>
-            <input type="password" placeholder="Password" value={password} onChange={(event) => setPassword(event.target.value)} />
-            <div id="uploadButtons">
-                <button onClick={onCancel}>Cancel</button>
-                <button onClick={onSubmit} disabled={Object.keys(results).length === 0 || password === ''}>Submit</button>
-            </div>
+            {recordsWereAdded ?
+                <>
+                    <AddedRecords records={recordsAdded} onBack={onUploadComplete} />
+                </>
+                :
+                <>
+                    <div>Upload file:</div>
+                    <div
+                        id="dropArea"
+                        ref={dropAreaRef}
+                        onClick={onDropAreaClick}
+                        onDrop={onDrop}
+                        onDragOver={onDragOver}
+                    >
+                        Drag and drop your file here
+                        <br />or<br />
+                        click to select a file
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            onClick={onFileInputClick}
+                            onChange={onFileChange}
+                            style={{ display: 'none' }}
+                        />
+                    </div>
+                    <input type="password" placeholder="Password" value={password} onChange={(event) => setPassword(event.target.value)} />
+                    <div id="uploadButtons">
+                        <button
+                            onClick={onSubmit}
+                            disabled={Object.keys(parsedFileData).length === 0 || password === ''}
+                        >Submit</button>
+                        <button
+                            onClick={onCancel}
+                        >Cancel</button>
+                    </div>
+                </>
+            }
         </div>
     );
 }
