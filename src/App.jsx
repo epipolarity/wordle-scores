@@ -2,12 +2,14 @@ import Scores from './Scores';
 import { useState, useEffect } from 'react';
 import './App.css';
 import Enter from './Enter';
+import Upload from './Upload';
 
 
 function App() {
   const [entered, setEntered] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState(new Date());
   const [scores, setScores] = useState({ scores: [], summary: {} });
+  const [uploading, setUploading] = useState(false);
 
   // useEffect hook to fetch the scores when the selected month changes
   useEffect(() => {
@@ -39,14 +41,33 @@ function App() {
     setEntered(true);
   }
 
+  function cancelUpload() {
+    setUploading(false);
+  }
+
+  function startUpload() {
+    setUploading(true);
+  }
+
+  let componentToRender;
+
+  if (!entered) {
+    componentToRender = <Enter onEnter={enter} />;
+  } else if (uploading) {
+    componentToRender = <Upload onCancel={cancelUpload} />;
+  } else {
+    componentToRender = <>
+      <Scores
+        selectedMonth={selectedMonth}
+        setSelectedMonth={setSelectedMonth}
+        scores={scores} />
+      <button onClick={startUpload}>Upload</button>
+    </>;
+  }
+
   return (
     <div className='appContainer'>
-      {!entered
-        ?
-        <Enter onEnter={enter} />
-        :
-        <Scores selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} scores={scores} />
-      }
+      {componentToRender}
     </div>
   );
 }
