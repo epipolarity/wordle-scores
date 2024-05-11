@@ -7,13 +7,15 @@ function CustomBar(props) {
     const barY = y + imgSize;
     const barHeight = height - imgSize;
     const textY = barY + barHeight / 2;
+
+    const scoreTextStyle = { fontSize: '16px', fontWeight: 'bold', fontFamily: 'Arial' };
+
     if (barHeight > 0) {
         return (
             <g>
                 <rect x={x} y={barY} width={width} height={barHeight} fill={payload.fill} />
                 <image href={imageUrl} x={imgX} y={imgY} width={imgSize} height={imgSize} />
-                <text x={x + width / 2} y={textY} textAnchor="middle" fill="#000" style={{ fontSize: '16px', fontWeight: 'bold', fontFamily: 'Arial' }}>{payload.mean.toFixed(2)}</text>
-                <text x={x + width / 2} y={textY + 15} textAnchor="middle" fill="#000" style={{ fontSize: '12px', fontStyle: 'italic', fontFamily: 'Arial' }}>{payload.missed > 0 ? '-' : ''}{payload.missed}</text>
+                <text x={x + width / 2} y={textY} textAnchor="middle" fill="#000" style={scoreTextStyle}>{payload.mean.toFixed(2)}</text>
             </g>
         );
     }

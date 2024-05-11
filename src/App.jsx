@@ -9,7 +9,7 @@ function App() {
   const [refreshKey, setRefreshKey] = useState(0); // used to force a re-render of the Scores component
   const [entered, setEntered] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState(new Date());
-  const [scores, setScores] = useState({ scores: [], summary: {} });
+  const [scores, setScores] = useState({ data: [], summary: {} });
   const [uploading, setUploading] = useState(false);
 
   // useEffect hook to fetch the scores when the selected month changes
@@ -68,7 +68,7 @@ function App() {
         selectedMonth={selectedMonth}
         setSelectedMonth={setSelectedMonth}
         scores={scores} />
-      <button onClick={startUpload}>Upload</button>
+      <button onClick={startUpload}>Upload Latest Scores</button>
     </>;
   }
 
