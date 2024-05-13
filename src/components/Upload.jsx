@@ -1,7 +1,6 @@
-import { parseText } from "./utils/parser";
+import { parseText } from "../utils/parser";
 import AddedRecords from "./AddedRecords";
 import { useRef, useState } from "react";
-
 import './Upload.css';
 
 function Upload({ onCancel, onUploadComplete }) {

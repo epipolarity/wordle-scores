@@ -1,46 +1,10 @@
 import './PlayerSummaryMonth.css';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-import { useEffect, useState, PureComponent } from 'react';
+import { useEffect, useState } from 'react';
 
-function histogram(values, bins = [1, 2, 3, 4, 5, 6, 7]) {
-    if (values) {
-        const hist = bins.map((bin) => {
-            return {
-                bin: bin === bins[bins.length - 1] ? 'X' : bin,
-                count: values.filter((value) => value === bin).length
-            };
-        });
-        return hist;
-    } else {
-        return [];
-    }
-}
+import { HistCountLabel, DistAxisLabel } from './CustomChartComponents';
 
-class HistCountLabel extends PureComponent {
-    render() {
-        const { x, y, width, height, value } = this.props;
-        return (
-            <text x={x + width} y={y} dy={height * 0.75} dx={-height / 5} fontWeight="bold" fill="white" fontSize={height * 0.8} textAnchor="end">
-                {value > 0 ? value : ''}
-            </text>
-        );
-    }
-}
-
-class DistAxisLabel extends PureComponent {
-    render() {
-        const { x: left, y: top, width, height } = this.props.viewBox;
-
-        const x = left - 10 + width / 2;
-        const y = top + 10 + height / 2;
-
-        return (
-            <text x={x} y={y} transform={`rotate(-90,${x},${y})`} fill="black" fontWeight="bold" fontSize={16} textAnchor="middle">
-                SCORE DISTRIBUTION
-            </text>
-        );
-    }
-}
+import { histogram } from '../utils/scoreHandling';
 
 function PlayerSummaryMonth({ player, scores }) {
 

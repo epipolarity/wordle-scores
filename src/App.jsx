@@ -1,8 +1,8 @@
-import Scores from './Scores';
+import Scores from './components/Scores';
+import Enter from './components/Enter';
+import Upload from './components/Upload';
 import { useState, useEffect } from 'react';
 import './App.css';
-import Enter from './Enter';
-import Upload from './Upload';
 
 
 function App() {

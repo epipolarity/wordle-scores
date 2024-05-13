@@ -1,5 +1,4 @@
 import DatePicker from 'react-datepicker';
-// import React, { useState } from 'react';
 import { addMonths, subMonths, startOfMonth } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
 import './MonthPicker.css';

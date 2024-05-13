@@ -1,4 +1,4 @@
-function CustomBar(props) {
+export function CustomBar(props) {
     const { x, y, width, height, payload } = props;
     const imageUrl = process.env.PUBLIC_URL + '/images/' + payload.img;
     const imgSize = 40;
@@ -19,7 +19,27 @@ function CustomBar(props) {
             </g>
         );
     }
-    return null;
 }
 
-export default CustomBar;
+export function HistCountLabel(props) {
+    const { x, y, width, height, value } = props;
+    return (
+        <text x={x + width} y={y} dy={height * 0.75} dx={-height / 5} fontWeight="bold" fill="white" fontSize={height * 0.8} textAnchor="end">
+            {value > 0 ? value : ''}
+        </text>
+    );
+
+}
+
+export function DistAxisLabel(props) {
+    const { x: left, y: top, width, height } = props.viewBox;
+
+    const x = left - 10 + width / 2;
+    const y = top + 10 + height / 2;
+
+    return (
+        <text x={x} y={y} transform={`rotate(-90,${x},${y})`} fill="black" fontWeight="bold" fontSize={16} textAnchor="middle">
+            SCORE DISTRIBUTION
+        </text>
+    );
+}
