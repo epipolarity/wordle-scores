@@ -1,4 +1,4 @@
-import MonthPicker from './MonthPicker';
+import DateRangePicker from './DateRangePicker';
 import { CustomBar } from './CustomChartComponents';
 import PlayerSummaryMonth from './PlayerSummaryMonth';
 
@@ -11,7 +11,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 const chartHeight = 300;
 const chartWidth = 300;
 
-function Scores({ selectedMonth, setSelectedMonth, scores }) {
+function Scores({ dateRange, setDateRange, scores }) {
 
     const chartableSummary = scoresToChartable(scores);
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -33,7 +33,7 @@ function Scores({ selectedMonth, setSelectedMonth, scores }) {
 
     return (
         <div id="scores">
-            <MonthPicker selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
+            <DateRangePicker dateRange={dateRange} setDateRange={setDateRange} />
             {chartableSummary.length === 0 ?
                 <p>No data yet...</p> :
                 <>
