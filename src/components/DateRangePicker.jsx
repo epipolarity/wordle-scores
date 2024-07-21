@@ -5,19 +5,14 @@ function DateRangePicker({ dateRange, setDateRange }) {
 
   const nextMonth = (prev, direction) => {
 
-    console.log(prev)
-
     let year = prev.year ? prev.year : new Date().getFullYear();
     let month = prev.month >= 0 ? prev.month : new Date().getMonth();
 
     let prevDate = new Date(year, month);
 
     const options = { year: 'numeric', month: 'long' };
-    console.log(prevDate.toLocaleDateString(undefined, options));
 
     let nextDate = direction > 0 ? addMonths(prevDate, 1) : subMonths(prevDate, 1);
-
-    console.log(nextDate.toLocaleDateString(undefined, options));
 
     return {
       month: nextDate.getMonth(),
@@ -64,7 +59,7 @@ function DateRangePicker({ dateRange, setDateRange }) {
 
   const formatDateRange = () => {
     if (dateRange.month >= 0) {
-      const date = new Date(dateRange.year, dateRange.month + 1);
+      const date = new Date(dateRange.year, dateRange.month);
       const options = { year: 'numeric', month: 'long' };
       return date.toLocaleDateString(undefined, options);
     } else {
