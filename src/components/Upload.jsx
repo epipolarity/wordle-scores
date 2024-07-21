@@ -1,3 +1,4 @@
+import pako from "pako";
 import { parseText } from "../utils/parser";
 import AddedRecords from "./AddedRecords";
 import { useRef, useState } from "react";
@@ -52,22 +53,30 @@ function Upload({ onCancel, onUploadComplete }) {
     };
 
     const onSubmit = async () => {
-        // create a POST request to the server
-        const formData = new FormData();
-        formData.append('password', password);
-        formData.append('data', JSON.stringify(parsedFileData));
+        // Prepare the JSON payload
+        const payload = {
+            password: password,
+            data: parsedFileData,
+        };
+        
+        const compressedPayload = pako.gzip(JSON.stringify(payload), { to: 'string' });
+
         try {
-            const response = await fetch('https://www.epipolar.com/wordle2/upload_w2.php', {
+            const response = await fetch('https://lab.epipolar.com/api/wordle/upload', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Encoding': 'gzip',
+                },
+                body: compressedPayload,
             });
+    
             if (!response.ok) {
                 const message = await response.text();
                 alert(`Error: ${message}`);
             } else {
                 const data = await response.json();
-                // if data is an array
                 if (Array.isArray(data)) {
+                    console.log(data);
                     setRecordsWereAdded(true);
                     setRecordsAdded(data);
                 } else { // just text
@@ -79,7 +88,7 @@ function Upload({ onCancel, onUploadComplete }) {
             console.error("Error uploading data:", error);
             alert("Error uploading data. Please try again later.");
         }
-    }
+    };
 
     return (
         <div id="uploadContainer">

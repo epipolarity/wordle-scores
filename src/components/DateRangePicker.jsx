@@ -10,8 +10,6 @@ function DateRangePicker({ dateRange, setDateRange }) {
 
     let prevDate = new Date(year, month);
 
-    const options = { year: 'numeric', month: 'long' };
-
     let nextDate = direction > 0 ? addMonths(prevDate, 1) : subMonths(prevDate, 1);
 
     return {
