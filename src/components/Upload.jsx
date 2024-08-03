@@ -80,7 +80,7 @@ function Upload({ onCancel, onUploadComplete }) {
                     setRecordsWereAdded(true);
                     setRecordsAdded(data);
                 } else { // just text
-                    alert(data);
+                    console.log(data);
                     onCancel();
                 }
             }
