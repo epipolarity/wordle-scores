@@ -21,9 +21,9 @@ function App() {
 
     let url;
     if (dateRange.month >= 0) {
-      url = `https://epipolar.com/wordle2/get_scores.php?year=${dateRange.year}&month=${dateRange.month + 1}`; // month is zero-based
+      url = `https://lab.epipolar.com/api/wordle/getscores?game=wordle&year=${dateRange.year}&month=${dateRange.month + 1}`; // month is zero-based      
     } else {
-      url = `https://epipolar.com/wordle2/get_scores.php?year=${dateRange.year}`;
+      url = `https://lab.epipolar.com/api/wordle/getscores?game=wordle&year=${dateRange.year}`;      
     }
 
     fetch(url, { signal: abortController.signal })

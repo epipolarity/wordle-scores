@@ -21,9 +21,10 @@ function PlayerSummaryMonth({ player, scores }) {
 
     useEffect(() => {
         if (player && scores.data) {
+            const playerIdx = scores.players.findIndex((pName) => pName === player.name);
             setGamesPlayed(
-                scores.data.filter((score) => score[player.name] >= 0)
-                    .map((score) => score[player.name])
+                scores.data.filter((score) => score.scores[playerIdx] >= 0)
+                    .map((score) => score.scores[playerIdx])
             );
         }
     }, [scores, player]);

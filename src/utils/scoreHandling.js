@@ -4,12 +4,13 @@ export function scoresToChartable(scores) {
         return [];
     }
 
-    const playerNames = Object.keys(scores.summary);
+    const playerNames = scores.players;
     const newSummary = playerNames.map((playerName) => {
+        const playerIdx = playerNames.findIndex((pName) => pName === playerName);
         return {
             name: playerName,
-            mean: scores.summary[playerName].mean,
-            missed: scores.data.reduce((acc, score) => acc + (score[playerName] < 0 ? 1 : 0), 0),
+            mean: scores.data.reduce((acc, score) => acc + Math.abs(score.scores[playerIdx]), 0) / scores.data.length,
+            missed: scores.data.reduce((acc, score) => acc + (score.scores[playerIdx] < 0 ? 1 : 0), 0),
         };
     });
 
